@@ -1,0 +1,6 @@
+rootProject.name = 'im-server'
+include 'login-server'
+include 'logic-server'
+include 'im-common'
+include 'im-db'
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.chl.db.data.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="org.chl.db.data.dom.User">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="mailbox" jdbcType="VARCHAR" property="mailbox" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <insert id="insert" parameterType="org.chl.db.data.dom.User">
+    insert into user (id, username, password,mailbox, createTime, updateTime)
+    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{mailbox,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="countByMailbox" resultType="java.lang.Integer">
+    select count(*) from user
+    <where>
+      <if test="mailbox!=null and mailbox!=''">
+        and mailbox = '${mailbox}'
+      </if>
+    </where>
+  </select>
+  <select id="selectByMailboxAndPassword" resultMap="BaseResultMap">
+    select * from user where mailbox = '${mailbox}' and password = '${password}'
+  </select>
+</mapper>

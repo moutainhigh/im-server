@@ -1,0 +1,30 @@
+subprojects {
+    apply plugin: 'java'
+    group 'org.chl'
+    version '1.0-SNAPSHOT'
+    sourceCompatibility = 1.8
+
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    }
+
+    dependencies {
+        // spring
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.1.RELEASE'
+        testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.1.RELEASE'
+        compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '2.2.1.RELEASE'
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '2.2.1.RELEASE'
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.2.1.RELEASE'
+        compile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.1.1'
+        // mysql
+        compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.17'
+        // email
+        compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
+        compile group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
+        // swagger2
+        compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+        compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    }
+}
