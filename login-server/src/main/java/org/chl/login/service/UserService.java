@@ -7,4 +7,6 @@ package org.chl.login.service;
  */
 public interface UserService {
     String login(Long id);
+
+    void logout();
 }

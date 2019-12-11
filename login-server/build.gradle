@@ -1,4 +1,5 @@
 dependencies {
     compile project(':im-common')
     compile project(':im-db')
+    compile project(':im-message')
 }

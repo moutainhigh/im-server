@@ -9,9 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @MapperScan("org.chl.db.data.mapper")
 @SpringBootApplication(scanBasePackages = {"org.chl"})
 public class LoginServerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(LoginServerApplication.class, args);
     }
-
 }

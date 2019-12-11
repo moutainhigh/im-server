@@ -1,8 +1,11 @@
 package org.chl.login.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import org.chl.common.config.RedisConfig;
 import org.chl.common.email.service.EmailService;
+import org.chl.common.model.PairModel;
 import org.chl.common.util.Md5Util;
+import org.chl.common.util.RandomKeyGenerator;
 import org.chl.common.util.ResultUtil;
 import org.chl.db.data.dom.User;
 import org.chl.db.data.mapper.UserMapper;
@@ -12,8 +15,11 @@ import org.chl.login.service.LoginService;
 import org.chl.login.service.UserService;
 import org.chl.login.view.LoginView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -30,6 +36,10 @@ public class LoginServiceImpl implements LoginService {
     private EmailService emailService;
     @Autowired
     private UserService userService;
+    @Resource
+    private RedisTemplate<String, PairModel<?, ?>> redisTemplate;
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     public JSONObject register(RegisterModel model) {
@@ -57,5 +67,11 @@ public class LoginServiceImpl implements LoginService {
         String token = userService.login(user.getId());
         LoginView view = new LoginView(user.getUsername(),user.getMailbox(),token);
         return ResultUtil.success((JSONObject) JSONObject.toJSON(view),"登入成功");
+    }
+
+    @Override
+    public JSONObject signout() {
+        userService.logout();
+        return ResultUtil.success(null,"登出成功");
     }
 }

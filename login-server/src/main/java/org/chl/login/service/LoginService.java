@@ -13,4 +13,6 @@ public interface LoginService {
     JSONObject register(RegisterModel model);
 
     JSONObject signin(SigninModel model);
+
+    JSONObject signout();
 }

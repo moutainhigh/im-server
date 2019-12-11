@@ -3,4 +3,5 @@ include 'login-server'
 include 'logic-server'
 include 'im-common'
 include 'im-db'
+include 'im-message'
 

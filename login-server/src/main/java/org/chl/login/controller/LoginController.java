@@ -7,6 +7,7 @@ import org.chl.login.model.SigninModel;
 import org.chl.login.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +40,10 @@ public class LoginController {
             return ResultUtil.failure(bindingResult.getFieldError().getDefaultMessage());
         }
         return loginService.signin(model);
+    }
+
+    @GetMapping("/signout")
+    JSONObject signout() {
+        return loginService.signout();
     }
 }
