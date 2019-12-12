@@ -1,11 +1,11 @@
 package org.chl.login.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import org.chl.common.config.RedisConfig;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.chl.common.email.service.EmailService;
 import org.chl.common.model.PairModel;
 import org.chl.common.util.Md5Util;
-import org.chl.common.util.RandomKeyGenerator;
 import org.chl.common.util.ResultUtil;
 import org.chl.db.data.dom.User;
 import org.chl.db.data.mapper.UserMapper;
@@ -43,7 +43,10 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public JSONObject register(RegisterModel model) {
-        if(userMapper.countByMailbox(model.getMailbox()) > 0){
+        QueryWrapper<User> query = new QueryWrapper<>();
+        query.eq("mailbox",model.getMailbox());
+        userMapper.selectCount(query);
+        if(userMapper.selectCount(query) > 0){
             return ResultUtil.failure("该邮箱已被占用");
         }
         if(emailService.validCode(model.getMailbox(),model.getCode()) == false){
@@ -60,7 +63,10 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public JSONObject signin(SigninModel model) {
-        User user = userMapper.selectByMailboxAndPassword(model.getMailbox(),Md5Util.encode(model.getPassword()));
+        QueryWrapper<User> query = new QueryWrapper<>();
+        query.eq("mailbox",model.getMailbox());
+        query.eq("password",Md5Util.encode(model.getPassword()));
+        User user = userMapper.selectOne(query);
         if(user == null){
             return ResultUtil.failure("邮箱或密码错误");
         }

@@ -1,12 +1,9 @@
 package org.chl.db.data.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.chl.db.data.dom.User;
 
-public interface UserMapper {
-    int insert(User user);
+public interface UserMapper extends BaseMapper<User> {
 
-    int countByMailbox(@Param("mailbox") String mailbox);
-
-    User selectByMailboxAndPassword(@Param("mailbox") String mailbox,@Param("password") String password);
 }
