@@ -28,6 +28,7 @@ public class MonitorTcpActor extends UntypedAbstractActor {
 	public void preStart() throws Exception {
 		// 订阅远程事件
 		 getContext().system().eventStream().subscribe(getSelf(), RemotingLifecycleEvent.class);
+
 	}
 	/**
 	 * 接受三中消息
@@ -51,7 +52,6 @@ public class MonitorTcpActor extends UntypedAbstractActor {
 									.actorSelection(actorFactory.getRemoteUrl() + fieldName);
 							selection.tell(new Identify(fieldName), getSelf());
 						}
-						
 					}
 				}
 			} catch (Exception e) {
@@ -68,7 +68,6 @@ public class MonitorTcpActor extends UntypedAbstractActor {
 					actorFactory.setRemoteHandler(remoteActorName, remeoteActor);
 					LOG.info("远程服务[{}]已经开启", remoteActorName);
 				}
-			
 		} else if (msg instanceof DisassociatedEvent) {// 断开连接
 			DisassociatedEvent event = (DisassociatedEvent) msg;
 			actorFactory.remoteClear();
@@ -81,8 +80,5 @@ public class MonitorTcpActor extends UntypedAbstractActor {
 		}else{
 			LOG.info("远程服务[{}]未定义", msg);
 		}
-		
 	}
-
-	
 }

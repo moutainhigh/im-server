@@ -19,13 +19,13 @@ public class RemoteActorName {
     /**
      *
      */
-    public static final String tcploginActor="tcploginActor";
+//    public static final String tcploginActor="tcploginActor";
     /**
      * 增加用户群
      */
-    public static final String httpUserAddGroupActor="httpUserAddGroupActor";
+//    public static final String httpUserAddGroupActor="httpUserAddGroupActor";
     /**
      * 删除用户群
      */
-    public static final String httpUserDelGroupActor="httpUserDelGroupActor";
+//    public static final String httpUserDelGroupActor="httpUserDelGroupActor";
 }

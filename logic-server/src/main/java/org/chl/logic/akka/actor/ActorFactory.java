@@ -3,8 +3,6 @@ package org.chl.logic.akka.actor;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import org.chl.common.constant.RemoteActorName;
 import org.chl.logic.akka.config.RemoteConfig;
 import org.slf4j.Logger;
@@ -12,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,53 +21,27 @@ import java.util.Map;
 @Component
 public class ActorFactory {
     private static final Logger LOG = LoggerFactory.getLogger(ActorFactory.class);
-    /**
-     * 远程调用根地址
-     */
+
+    private final RemoteConfig remoteConfig;
+    private final ActorSystem actorSystem;
+
     private String remoteUrl;
-    /**
-     * 根actor
-     */
-    private ActorSystem sysActor;
-    /**
-     * 集群扩展atcor
-     */
     private ActorRef clusterActor;
-    /**
-     * 本地actor
-     */
-    private Map<String, ActorRef> actorMap = new HashMap<>();
-    /**
-     * 远程http actor
-     */
-    private Map<String, ActorRef> remoteActorMap = new HashMap<>();
-    /**
-     * 远程监控actor
-     */
     private ActorRef monitorRemoteActor;
-
-    /**
-     * 本地配置文件
-     */
-    private static final String SERVER_CFG_FILE = "logic-server/src/main/resources/akka_tcp_server_actor.conf";
+    private Map<String, ActorRef> remoteActorMap = new HashMap<>();
 
     @Autowired
-    private RemoteConfig remoteConfig;
-
-    @Autowired
-    public void init() {
-        remoteUrl = String.format(RemoteActorName.rootPath, RemoteActorName.sysActorName, remoteConfig.getIp(), remoteConfig.getPort());
-        Config config = ConfigFactory.parseFile(new File(SERVER_CFG_FILE));
-        sysActor = ActorSystem.create(RemoteActorName.sysActorName, config);
-        monitorRemoteActor = sysActor.actorOf(Props.create(MonitorHttpActor.class, this), "monitorRemoteActor");
-        clusterActor = sysActor.actorOf(Props.create(ServerClusterActor.class, this), "clusterActor");
-        //登录
-//        actorMap.put(RemoteActorName.tcploginActor, sysActor.actorOf(Props.create(LoginActor.class), RemoteActorName.tcploginActor));
-        LOG.info("初始化actor完成,远程调用根地址[{}],系统配置文件[{}]", remoteUrl, config.toString());
+    public ActorFactory(RemoteConfig remoteConfig, ActorSystem actorSystem) {
+        this.remoteConfig = remoteConfig;
+        this.actorSystem = actorSystem;
+        this.remoteUrl = String.format(RemoteActorName.rootPath, RemoteActorName.sysActorName, remoteConfig.getIp(), remoteConfig.getPort());
+        this.monitorRemoteActor = actorSystem.actorOf(Props.create(MonitorHttpActor.class, this), "monitorRemoteActor");
+        this.clusterActor = actorSystem.actorOf(Props.create(ServerClusterActor.class, this), "clusterActor");
+        LOG.info("初始化actor完成,远程调用根地址[{}]", remoteUrl);
     }
 
     public ActorSystem getSysActor() {
-        return sysActor;
+        return actorSystem;
     }
 
     public String getRemoteUrl() {
