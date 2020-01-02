@@ -15,6 +15,7 @@ subprojects {
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.1.RELEASE'
         testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.1.RELEASE'
         compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '2.2.1.RELEASE'
+        annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '2.2.1.RELEASE'
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '2.2.1.RELEASE'
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.2.1.RELEASE'
         // mysql

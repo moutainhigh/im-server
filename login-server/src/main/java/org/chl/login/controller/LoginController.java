@@ -2,9 +2,9 @@ package org.chl.login.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import org.chl.common.util.ResultUtil;
-import org.chl.login.model.RegisterModel;
-import org.chl.login.model.SigninModel;
 import org.chl.login.service.LoginService;
+import org.chl.login.vo.RegisterVo;
+import org.chl.login.vo.SigninVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,19 +27,19 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/register")
-    JSONObject register(@Valid RegisterModel model, BindingResult bindingResult) {
+    JSONObject register(@Valid RegisterVo registerVo, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             return ResultUtil.failure(bindingResult.getFieldError().getDefaultMessage());
         }
-        return loginService.register(model);
+        return loginService.register(registerVo);
     }
 
     @PostMapping("/signin")
-    JSONObject signin(@Valid SigninModel model, BindingResult bindingResult) {
+    JSONObject signin(@Valid SigninVo signinVo, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             return ResultUtil.failure(bindingResult.getFieldError().getDefaultMessage());
         }
-        return loginService.signin(model);
+        return loginService.signin(signinVo);
     }
 
     @GetMapping("/signout")

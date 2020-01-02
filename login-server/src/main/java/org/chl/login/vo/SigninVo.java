@@ -1,4 +1,4 @@
-package org.chl.login.model;
+package org.chl.login.vo;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -6,9 +6,9 @@ import javax.validation.constraints.NotBlank;
 /**
  * @Auther: monster
  * @Date: 2019/12/6
- * @Description: 登入模型
+ * @Description: 登入值对象
  */
-public class SigninModel {
+public class SigninVo {
     @NotBlank(message = "邮箱不能为空")
     @Email(message = "邮箱不合法")
     private String mailbox;

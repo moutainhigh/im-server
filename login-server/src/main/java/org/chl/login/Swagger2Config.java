@@ -19,6 +19,6 @@ public class Swagger2Config {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("im-login").description("登录模块").version("1.0").build();
+		return new ApiInfoBuilder().title("im-login").description("登录服").version("1.0").build();
 	}
 }

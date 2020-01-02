@@ -1,0 +1,15 @@
+{
+	"login": {
+		"msgId": 700
+	},
+	"login.ReqWxMpLogin": {
+		"msgId": 70001
+	},
+	"login.ResLogin": {
+		"msgId": 70002,
+		"res": {
+			"1": "成功",
+			"0": "失败"
+		}
+	}
+}

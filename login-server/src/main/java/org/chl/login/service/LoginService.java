@@ -1,8 +1,8 @@
 package org.chl.login.service;
 
 import com.alibaba.fastjson.JSONObject;
-import org.chl.login.model.RegisterModel;
-import org.chl.login.model.SigninModel;
+import org.chl.login.vo.RegisterVo;
+import org.chl.login.vo.SigninVo;
 
 /**
  * @Auther: monster
@@ -10,9 +10,9 @@ import org.chl.login.model.SigninModel;
  * @Description: TODO
  */
 public interface LoginService {
-    JSONObject register(RegisterModel model);
+    JSONObject register(RegisterVo model);
 
-    JSONObject signin(SigninModel model);
+    JSONObject signin(SigninVo model);
 
     JSONObject signout();
 }

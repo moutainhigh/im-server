@@ -1,0 +1,27 @@
+spring:
+  main:
+    web-application-type: none
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.107.144.40:3306/im?useSSL=false&serverTimezone=GMT%2b8
+    username: root
+    password: root
+  redis:
+    database: 0
+    host: 47.107.144.40
+    port: 6379
+    password: 123456
+  rabbitmq:
+    host: 47.107.144.40
+    port: 5672
+    username: admin
+    password: admin
+mybatis-plus:
+  type-aliases-package: org.chl.db.data.entity
+  mapper-locations: classpath:mapper/*.xml
+akka:
+  remote:
+    ip: 127.0.0.1
+    port: 2301
+netty:
+  port: 7002
