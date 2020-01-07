@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class RegisterVo {
 
     @NotBlank(message = "昵称不能为空")
-    private String nickename;
+    private String nickname;
 
     @NotBlank(message = "密码不能为空")
     private String password;

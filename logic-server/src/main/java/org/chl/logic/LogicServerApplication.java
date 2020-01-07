@@ -2,6 +2,7 @@ package org.chl.logic;
 
 import org.chl.logic.config.NettyConfig;
 import org.chl.logic.server.TcpServer;
+import org.chl.logic.user.manager.UserMgr;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ public class LogicServerApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(LogicServerApplication.class, args);
+        System.out.println();
     }
 
     @Override

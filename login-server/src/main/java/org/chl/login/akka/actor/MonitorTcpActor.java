@@ -61,10 +61,10 @@ public class MonitorTcpActor extends UntypedAbstractActor {
 		} else if (msg instanceof ActorIdentity) {
 			ActorIdentity aiy = (ActorIdentity) msg;
 			String remoteActorName=aiy.correlationId().toString();
-				if (aiy.getActorRef().get() == null) {
+				if (aiy.getRef() == null) {
 					LOG.warn("远程服务[{}]未开启", remoteActorName);
 				} else {
-					ActorRef remeoteActor = aiy.getActorRef().get();
+					ActorRef remeoteActor = aiy.getRef();
 					actorFactory.setRemoteHandler(remoteActorName, remeoteActor);
 					LOG.info("远程服务[{}]已经开启", remoteActorName);
 				}

@@ -3,6 +3,5 @@ dependencies {
     compile project(':im-message')
     compile project(':im-core')
     compile project(':im-db')
-    compile group: 'io.netty', name: 'netty-all', version: '4.1.39.Final'
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.9.1'
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.44.Final'
 }

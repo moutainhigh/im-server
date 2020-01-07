@@ -19,7 +19,7 @@ public class RemoteActorName {
     /**
      *
      */
-//    public static final String tcploginActor="tcploginActor";
+    public static final String tcploginActor="tcploginActor";
     /**
      * 增加用户群
      */

@@ -27,8 +27,8 @@ subprojects {
         compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
         compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
         // akka
-        compile group: 'com.typesafe.akka', name: 'akka-cluster-typed_2.13', version: '2.6.1'
-        compile group: 'com.typesafe.akka', name: 'akka-persistence-typed_2.13', version: '2.6.1'
+        compile group: 'com.typesafe.akka', name: 'akka-cluster_2.13', version: '2.5.27'
+        compile group: 'com.typesafe.akka', name: 'akka-persistence_2.13', version: '2.5.27'
         compile group: 'org.fusesource.leveldbjni', name: 'leveldbjni-all', version: '1.8'
         // mybaitis-plus
         compile group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.3.0'

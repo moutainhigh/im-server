@@ -4,6 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import org.chl.common.constant.RemoteActorName;
+import org.chl.logic.akka.actor.login.LoginActor;
 import org.chl.logic.akka.config.RemoteConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class ActorFactory {
     private String remoteUrl;
     private ActorRef clusterActor;
     private ActorRef monitorRemoteActor;
+    private Map<String,ActorRef> actorMap=new HashMap<>();
     private Map<String, ActorRef> remoteActorMap = new HashMap<>();
 
     @Autowired
@@ -37,6 +39,8 @@ public class ActorFactory {
         this.remoteUrl = String.format(RemoteActorName.rootPath, RemoteActorName.sysActorName, remoteConfig.getIp(), remoteConfig.getPort());
         this.monitorRemoteActor = actorSystem.actorOf(Props.create(MonitorHttpActor.class, this), "monitorRemoteActor");
         this.clusterActor = actorSystem.actorOf(Props.create(ServerClusterActor.class, this), "clusterActor");
+        // 登录
+        actorMap.put(RemoteActorName.tcploginActor, actorSystem.actorOf(Props.create(LoginActor.class),RemoteActorName.tcploginActor));
         LOG.info("初始化actor完成,远程调用根地址[{}]", remoteUrl);
     }
 
