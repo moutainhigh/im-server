@@ -1,19 +1,18 @@
 package org.chl.logic.server;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.chl.common.util.PackageUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class MsgHandlerFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MsgHandlerFactory.class);
     private static final String HANDLER_PKG = "org.chl";
     private static final String PROTOCOL_CFG_FILE = "logic-server/src/main/resources/proto.json";
     private static final Map<Integer, Ihandler> MSG_HANLERS = new HashMap<>();
@@ -45,7 +44,7 @@ public class MsgHandlerFactory {
                     String className = keyArray[1] + "Handler";
                     Class<?> ih = getHandler(className);
                     if (ih == null) {
-                        LOG.error("协议[" + msgId + "]" + className + "找不到实现类");
+                        log.error("协议[" + msgId + "]" + className + "找不到实现类");
                         continue;
                     }
                     Ihandler handler = (Ihandler) ih.getDeclaredConstructor().newInstance();
@@ -53,8 +52,8 @@ public class MsgHandlerFactory {
                 }
             }
         } catch (Exception e) {
-            LOG.error("cuowu",e);
-            LOG.error("加载协议配置文件[" + PROTOCOL_CFG_FILE + "][{}]错误", jsonStr);
+            log.error("cuowu",e);
+            log.error("加载协议配置文件[" + PROTOCOL_CFG_FILE + "][{}]错误", jsonStr);
         }
     }
 
@@ -77,7 +76,7 @@ public class MsgHandlerFactory {
         if(protoMeesage.containsKey(moduleKey)) {
             moduleId = protoMeesage.getJSONObject(moduleKey).getIntValue("id");
         }else {
-            LOG.error("加载[" + moduleKey + "]错误");
+            log.error("加载[" + moduleKey + "]错误");
         }
         return moduleId;
     }
@@ -87,7 +86,7 @@ public class MsgHandlerFactory {
 		if(protoMeesage.containsKey(msgKey)) {
 			protocol = protoMeesage.getJSONObject(msgKey).getIntValue("id");
 		}else {
-			LOG.error("加载[" + msgKey + "]错误");
+			log.error("加载[" + msgKey + "]错误");
 		}
 		return protocol;
 	}

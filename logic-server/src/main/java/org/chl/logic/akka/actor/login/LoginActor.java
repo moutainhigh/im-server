@@ -2,9 +2,9 @@ package org.chl.logic.akka.actor.login;
 
 import akka.actor.UntypedAbstractActor;
 import com.alibaba.fastjson.JSONObject;
+import org.chl.common.akka.SpringExt;
 import org.chl.db.data.entity.User;
 import org.chl.logic.user.manager.UserMgr;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @Auther: chenlin
@@ -13,14 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class LoginActor extends UntypedAbstractActor {
 
-//    @Autowired
-//    private UserMgr userMgr;
-
     @Override
     public void onReceive(Object message) throws Throwable {
         if(message instanceof String){
             String msg = (String) message;
-//            userMgr.loginByHttp(JSONObject.parseObject(msg, User.class));
+            UserMgr userMgr = SpringExt.getBean(UserMgr.class);
+            userMgr.loginByHttp(JSONObject.parseObject(msg, User.class));
         }
     }
 }

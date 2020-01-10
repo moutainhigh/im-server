@@ -1,19 +1,18 @@
 package org.chl.logic.server;
 
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.chl.common.Game;
 import org.chl.core.concurrent.TaskExecutor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
  * 任务处理器
  */
+@Slf4j
 @Component
 public class ExecutorMgr {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExecutorMgr.class);
     // 登录Executor大小
     public static final int LOGIN_EXECUTOR_SIZE = 8;
     // 玩家数据保存Executor大小
@@ -116,6 +115,6 @@ public class ExecutorMgr {
         for (TaskExecutor executor : playerSaveExecutors) {
             executor.shutdownNow();
         }
-        LOG.info("所有TaskExecutor关闭");
+        log.info("所有TaskExecutor关闭");
     }
 }

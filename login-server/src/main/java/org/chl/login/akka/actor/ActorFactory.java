@@ -3,10 +3,9 @@ package org.chl.login.akka.actor;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import lombok.extern.slf4j.Slf4j;
 import org.chl.common.constant.RemoteActorName;
 import org.chl.login.akka.config.RemoteConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +17,9 @@ import java.util.Map;
  *
  * @author wang
  */
+@Slf4j
 @Component
 public class ActorFactory {
-    private static final Logger LOG = LoggerFactory.getLogger(ActorFactory.class);
 
     private final RemoteConfig remoteConfig;
     private final ActorSystem actorSystem;
@@ -38,7 +37,7 @@ public class ActorFactory {
         this.remoteUrl = String.format(RemoteActorName.rootPath, RemoteActorName.sysActorName, remoteConfig.getIp(), remoteConfig.getPort());
         this.monitorRemoteActor = actorSystem.actorOf(Props.create(MonitorTcpActor.class, this), "monitorRemoteActor");
         this.clusterActor = actorSystem.actorOf(Props.create(ServerClusterActor.class), "clusterActor");
-        LOG.info("初始化actor完成,远程调用根地址[{}]",remoteUrl);
+        log.info("初始化actor完成,远程调用根地址[{}]",remoteUrl);
     }
 
     public ActorSystem getSysActor() {
@@ -68,12 +67,12 @@ public class ActorFactory {
     public void setRemoteHandler(String actorName, ActorRef remeoteActor) {
         String key = remoteUrl + actorName;
         remoteActorMap.put(key, remeoteActor);
-        LOG.info("增加[{}] actor", key);
+        log.info("增加[{}] actor", key);
     }
 
     public void removeRemoteHandler(ActorRef actor) {
         remoteActorMap.remove(actor.path().toString());
-        LOG.info("删除[{}] actor", actor.path().toString());
+        log.info("删除[{}] actor", actor.path().toString());
     }
 
     public void remoteClear() {

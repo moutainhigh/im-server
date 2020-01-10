@@ -3,11 +3,10 @@ package org.chl.logic.akka.actor;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import lombok.extern.slf4j.Slf4j;
 import org.chl.common.constant.RemoteActorName;
 import org.chl.logic.akka.actor.login.LoginActor;
 import org.chl.logic.akka.config.RemoteConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +18,9 @@ import java.util.Map;
  *
  * @author wang
  */
+@Slf4j
 @Component
 public class ActorFactory {
-    private static final Logger LOG = LoggerFactory.getLogger(ActorFactory.class);
 
     private final RemoteConfig remoteConfig;
     private final ActorSystem actorSystem;
@@ -41,7 +40,7 @@ public class ActorFactory {
         this.clusterActor = actorSystem.actorOf(Props.create(ServerClusterActor.class, this), "clusterActor");
         // 登录
         actorMap.put(RemoteActorName.tcploginActor, actorSystem.actorOf(Props.create(LoginActor.class),RemoteActorName.tcploginActor));
-        LOG.info("初始化actor完成,远程调用根地址[{}]", remoteUrl);
+        log.info("初始化actor完成,远程调用根地址[{}]", remoteUrl);
     }
 
     public ActorSystem getSysActor() {
@@ -71,12 +70,12 @@ public class ActorFactory {
     public void setRemoteHandler(String actorName, ActorRef remeoteActor) {
         String key = remoteUrl + actorName;
         remoteActorMap.put(key, remeoteActor);
-        LOG.warn("增加[{}] actor", key);
+        log.warn("增加[{}] actor", key);
     }
 
     public void removeRemoteHandler(ActorRef actor) {
         remoteActorMap.remove(actor.path().toString());
-        LOG.warn("删除[{}] actor", actor.path().toString());
+        log.warn("删除[{}] actor", actor.path().toString());
     }
 
     public int getRemoteActorSize() {

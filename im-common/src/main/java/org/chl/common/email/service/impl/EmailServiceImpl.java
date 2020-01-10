@@ -1,17 +1,16 @@
 package org.chl.common.email.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.chl.common.config.RedisConfig;
 import org.chl.common.constant.CommonConstant;
 import org.chl.common.email.config.EmailConfig;
 import org.chl.common.email.service.EmailService;
 import org.chl.common.model.PairModel;
 import org.chl.common.mq.rabbit.producer.EmailProducer;
-import org.chl.common.config.RedisConfig;
 import org.chl.common.util.RandomKeyGenerator;
 import org.chl.common.util.ResultUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,10 +24,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@Slf4j
 @Service
 public class EmailServiceImpl implements EmailService {
-
-	private static final Logger LOG = LoggerFactory.getLogger(EmailServiceImpl.class);
 
 	@Autowired
 	private EmailConfig emailConfig;
@@ -78,7 +76,7 @@ public class EmailServiceImpl implements EmailService {
 			transport.sendMessage(message, message.getAllRecipients());
 			transport.close();
 		} catch (MessagingException e) {
-			LOG.error("MessagingException:", e);
+			log.error("MessagingException:", e);
 			return;
 		}
 		redisTemplate.opsForHash().put(RedisConfig.REDIS_KEY_EMAIL, model.v1, model.v2);

@@ -21,6 +21,7 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.ReferenceCountUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.chl.common.Game;
 import org.chl.logic.event.manager.EventMgr;
 import org.chl.logic.event.struct.net.ChannelCloseEvent;
@@ -28,8 +29,6 @@ import org.chl.logic.event.struct.net.ChannelConnectEvent;
 import org.chl.logic.user.bo.UserBo;
 import org.chl.message.CommMessage;
 import org.chl.message.protocol.Protocol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +40,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2020/1/2
  * @Description: TCP服务器
  */
+@Slf4j
 @Component
 public class TcpServer {
     @Autowired
@@ -48,7 +48,6 @@ public class TcpServer {
     @Autowired
     private ExecutorMgr executorMgr;
 
-    private static final Logger LOG = LoggerFactory.getLogger(TcpServer.class);
     private final EventLoopGroup bossGroup = new NioEventLoopGroup();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     public boolean isStop = false;
@@ -71,10 +70,10 @@ public class TcpServer {
         Channel channel = null;
         try {
             channel = serverBootstrap.bind(port).sync().channel();
-            LOG.info("游戏服务器启动成功，监听端口[{}]", port);
+            log.info("游戏服务器启动成功，监听端口[{}]", port);
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
-            LOG.error("游戏服务器启动异常", e);
+            log.error("游戏服务器启动异常", e);
             System.exit(1);
         } finally {
             bossGroup.shutdownGracefully();
@@ -83,13 +82,13 @@ public class TcpServer {
     }
 
     public void stop() {
-        LOG.info("游戏服务器关闭中...");
+        log.info("游戏服务器关闭中...");
         long now = System.currentTimeMillis();
         isStop = true;
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
         executorMgr.shutdown();
-        LOG.info("游戏服务器关闭成功,耗时[{}]毫秒", System.currentTimeMillis() - now);
+        log.info("游戏服务器关闭成功,耗时[{}]毫秒", System.currentTimeMillis() - now);
     }
 
     private class WebSocketFrameHandler extends ChannelInboundHandlerAdapter {
@@ -102,13 +101,13 @@ public class TcpServer {
             String ip = ((InetSocketAddress) channel.remoteAddress()).getHostString();
             UserBo userBo = new UserBo(channel, ip);
             channel.attr(UserBo.PLAYER_KEY).set(userBo);
-            LOG.info("建立连接成功:[{}]", channel);
+            log.info("建立连接成功:[{}]", channel);
             eventMgr.post(new ChannelConnectEvent(userBo));
         }
 
         @Override
         public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-            LOG.info("断开连接成功:[{}]", ctx.channel());
+            log.info("断开连接成功:[{}]", ctx.channel());
             UserBo userBo = ctx.channel().attr(UserBo.PLAYER_KEY).get();
             if (userBo != null && userBo.getUser() != null) {
                 eventMgr.post(new ChannelCloseEvent(userBo));
@@ -130,18 +129,18 @@ public class TcpServer {
 
         private void handleHttpRequest(ChannelHandlerContext ctx, FullHttpRequest request) {
             if (!request.decoderResult().isSuccess() || (!"websocket".equals(request.headers().get("Upgrade")))) {
-                LOG.warn("HTTP解码失败");
+                log.warn("HTTP解码失败");
                 return;
             }
             WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
                     "ws://" + request.headers().get(HttpHeaderNames.HOST), null, false);
             handshaker = wsFactory.newHandshaker(request);
             if (handshaker == null) {
-                LOG.warn("无法处理的websocket版本");
+                log.warn("无法处理的websocket版本");
                 WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
             } else {
                 handshaker.handshake(ctx.channel(), request);
-                LOG.info("向客户端发送websocket握手,完成握手");
+                log.info("向客户端发送websocket握手,完成握手");
             }
         }
 
@@ -156,7 +155,7 @@ public class TcpServer {
                     CommMessage.Comm message = CommMessage.Comm.parseFrom(req);
                     dispatch(channel.attr(UserBo.PLAYER_KEY).get(), message);
                 } catch (InvalidProtocolBufferException e) {
-                    LOG.warn("会话[{}]消息[{}]格式不正确", channel, JSON.toJSONString(binaryWebSocketFrame));
+                    log.warn("会话[{}]消息[{}]格式不正确", channel, JSON.toJSONString(binaryWebSocketFrame));
                     ctx.close();
                 }
             }
@@ -179,7 +178,7 @@ public class TcpServer {
                 // 根据游戏分发
                 executorMgr.getGameExecutor(moduleId).execute(new ReqMsgTask(userBo, message));
             } else {
-                LOG.warn("消息id[{}]无法找到对应的executor,请按规则定义", message.getMsgId());
+                log.warn("消息id[{}]无法找到对应的executor,请按规则定义", message.getMsgId());
                 userBo.channel.close();
             }
         }

@@ -6,16 +6,15 @@ import akka.cluster.ClusterEvent;
 import akka.cluster.ClusterEvent.MemberEvent;
 import akka.cluster.ClusterEvent.MemberUp;
 import akka.cluster.ClusterEvent.UnreachableMember;
+import lombok.extern.slf4j.Slf4j;
 import org.chl.common.constant.RemoteActorName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 /**
  * 集群监控
  * @author wang
  *
  */
+@Slf4j
 public class ServerClusterActor extends UntypedAbstractActor {
-	private static final Logger LOG = LoggerFactory.getLogger(ServerClusterActor.class);
 	private Cluster cluster = Cluster.get(getContext().system());
 	private final ActorFactory actorFactory;
 	public ServerClusterActor(ActorFactory actorFactory) {
@@ -47,10 +46,10 @@ public class ServerClusterActor extends UntypedAbstractActor {
 					break;
 				}
 			}
-			LOG.info("服务节点[{}]角色[{}]已经加入集群，等待确认服务确认",mp.member().address(),mp.member().roles());
+			log.info("服务节点[{}]角色[{}]已经加入集群，等待确认服务确认",mp.member().address(),mp.member().roles());
 		}else if(msg instanceof UnreachableMember) {
 			UnreachableMember mp=(UnreachableMember) msg;
-			LOG.info("服务节点[{}]角色[{}]已经被移除当前集群",mp.member().address(),mp.member().roles());
+			log.info("服务节点[{}]角色[{}]已经被移除当前集群",mp.member().address(),mp.member().roles());
 		}
 
 	}

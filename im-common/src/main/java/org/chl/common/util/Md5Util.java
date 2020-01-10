@@ -1,7 +1,6 @@
 package org.chl.common.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,10 +13,9 @@ import java.security.NoSuchAlgorithmException;
  * 
  * @version 1.0
  */
+@Slf4j
 public class Md5Util {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(Md5Util.class);
-	
+
 	public static String encode(String source) {
 		try {
 			StringBuffer result = new StringBuffer();
@@ -32,7 +30,7 @@ public class Md5Util {
 			}
 			return result.toString().replaceAll("\\s", "0");
 		} catch (NoSuchAlgorithmException e) {
-			LOGGER.error("md5 error");
+			log.error("md5 error");
 			return source;
 		}
 	}

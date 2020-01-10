@@ -1,9 +1,8 @@
 package org.chl.common.exception;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.chl.common.util.ResultUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -14,16 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@Slf4j
 @Component
 public class GlobalExpetion implements HandlerExceptionResolver {
-
-    private static final Logger LOG = LoggerFactory.getLogger(GlobalExpetion.class);
 
     @Override
     public ModelAndView resolveException(HttpServletRequest req, HttpServletResponse resp, Object o, Exception e) {
         JSONObject result = null;
         if (e instanceof Exception) {
-            LOG.error("全局异常:", e);
+            log.error("全局异常:", e);
             result = ResultUtil.failure("系统繁忙");
         }
         PrintWriter writer = null;
@@ -32,7 +30,7 @@ public class GlobalExpetion implements HandlerExceptionResolver {
             writer = resp.getWriter();
             writer.write(result.toString());
         } catch (IOException ex) {
-            LOG.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
         } finally {
             if (writer != null) {
                 writer.close();

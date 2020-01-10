@@ -1,7 +1,6 @@
 package org.chl.core.concurrent;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -64,8 +63,8 @@ public class TaskExecutor extends ThreadPoolExecutor {
  * @author wang
  * @date 2016年12月22日 下午8:18:15
  */
+@Slf4j
 final class Task implements Runnable {
-    private static final Logger LOG = LoggerFactory.getLogger(Task.class);
     final Runnable cmd;
     Task(Runnable cmd) {
         this.cmd = cmd;
@@ -76,7 +75,7 @@ final class Task implements Runnable {
         try {
             cmd.run();
         } catch (Throwable e) {
-            LOG.error("任务执行异常", e);
+            log.error("任务执行异常", e);
         }
     }
 }
